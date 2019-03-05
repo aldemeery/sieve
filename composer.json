@@ -1,0 +1,33 @@
+{
+    "name": "aldemeery/sieve",
+    "description": "A simple, clean and elegant way to filter Eloquent models.",
+    "keywords": ["laravel", "eloquent", "filters", "search", "query", "filter", "filtration"],
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Osama Aldemeery",
+            "email": "aldemeery@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=5.6",
+        "illuminate/support": "~5.3",
+        "illuminate/database": "~5.3",
+        "illuminate/http": "~5.3",
+        "illuminate/console": "~5.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Aldemeery\\Sieve\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Aldemeery\\Sieve\\FiltersServiceProvider"
+            ]
+        }
+    }
+}

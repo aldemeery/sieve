@@ -1,0 +1,31 @@
+<?php
+
+namespace DummyNamespace;
+
+use Aldemeery\Sieve\Filter;
+use Illuminate\Database\Eloquent\Builder;
+
+class DummyClass extends Filter
+{
+    /**
+     * Filter values mappings.
+     * 
+     * @var array
+     */
+    protected $mappings = [
+        //
+    ];
+
+    /**
+     * Filter records.
+     * 
+     * @param Builder $builder 
+     * @param mixed   $value   
+     * 
+     * @return Builder
+     */
+    public function filter(Builder $builder, $value)
+    {
+        //
+    }
+}
