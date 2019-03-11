@@ -2,9 +2,9 @@
 
 namespace Aldemeery\Sieve\Exceptions;
 
-use Excption;
+use Exception;
 
-class FilterBagNotFoundException extends Excption
+class FilterBagNotFoundException extends Exception
 {
     // Silence is golden...
 }
