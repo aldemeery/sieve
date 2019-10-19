@@ -16,7 +16,8 @@
         "illuminate/support": "~5.3|~6",
         "illuminate/database": "~5.3|~6",
         "illuminate/http": "~5.3|~6",
-        "illuminate/console": "~5.3|~6"
+        "illuminate/console": "~5.3|~6",
+        "laravel/helpers": "1.*"
     },
     "autoload": {
         "psr-4": {
