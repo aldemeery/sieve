@@ -3,7 +3,6 @@
 namespace Aldemeery\Sieve\Concerns;
 
 use Aldemeery\Sieve\DefaultFilterBag;
-use Aldemeery\Sieve\Exceptions\FilterBagNotFoundException;
 use Aldemeery\Sieve\FiltrationEngine;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -13,28 +12,28 @@ trait Filterable
     /**
      * Scope a query to use filters.
      *
-     * @param Builder $builder
-     * @param Request $request
-     * @param array   $filters
+     * @param \Illuminate\Database\Eloquent\Builder $builder Eloquent builder isntance.
+     * @param \Illuminate\Http\Request $request Incoming request instance.
+     * @param array $filters Array of filters to use. Structure: ["filter-name" => FilterClass::class]
      *
-     * @return Builder
+     * @return void
      */
     public function scopeFilter(Builder $builder, Request $request, array $filters = [])
     {
         $filters = array_merge($this->allFilters(), $filters);
 
-        return (new FiltrationEngine($builder, $request))->plugFilters($filters)->run();
+        (new FiltrationEngine($builder, $request))->plugFilters($filters)->run();
     }
 
     /**
      * Filter bags used by the model.
      *
-     * @return string
+     * @return array
      */
     protected function filterBags()
     {
         return [
-            // 
+            // \FilterBagClass::class
         ];
     }
 
@@ -46,14 +45,14 @@ trait Filterable
     protected function filters()
     {
         return [
-            //
+            // "filter-name" => \FilterCalss::class
         ];
     }
 
     /**
-     * Get all filters in the model combined.
+     * Get all filters in the model combined with the filters from the filter bags.
      *
-     * @return array 
+     * @return array
      */
     private function allFilters()
     {

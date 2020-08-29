@@ -2,37 +2,41 @@
 
 namespace Aldemeery\Sieve;
 
+use Aldemeery\Sieve\Exceptions\UnresolvableFilterException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 class FiltrationEngine
 {
     /**
      * Request instance.
-     * 
+     *
      * @var \Illuminate\Http\Request
      */
     protected $request;
 
     /**
      * Builder instance.
-     * 
+     *
      * @var \Illuminate\Database\Eloquent\Builder
      */
     protected $builder;
 
     /**
      * Array of filters to be applied.
-     * 
+     *
      * @var array
      */
-    protected $filters = [];
+    protected $filters = [
+        // Silence is golden...
+    ];
 
     /**
      * Constructor.
-     * 
-     * @param Builder $builder
-     * @param Request $request 
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $builder Eloquent builder instance.
+     * @param \Illuminate\Http\Request $request Incoming request instance.
      */
     public function __construct(Builder $builder, Request $request)
     {
@@ -41,11 +45,11 @@ class FiltrationEngine
     }
 
     /**
-     * Add filters to engine.
-     * 
-     * @param array $filters 
+     * Add filters to the engine.
      *
-     * @return $this
+     * @param array $filters Array of filters to add to the engine. Structure: ["filter-name" => FilterClass::class]
+     *
+     * @return FiltrationEngine
      */
     public function plugFilters(array $filters = [])
     {
@@ -55,53 +59,45 @@ class FiltrationEngine
     }
 
     /**
-     * Apply filters on query.
-     * 
-     * @param Builder $builder 
-     * 
-     * @return Builder
+     * Apply the filters on the builder.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $builder Eloquent builder.
+     *
+     * @return void
      */
     public function run()
     {
-        foreach ($this->getFilters() as $filter => $value) {
-            $this->resolveFilter($filter)->filter($this->builder, $value);
+        foreach ($this->relevantFilters() as $filterName => $value) {
+            $filter = $this->resolveFilter($filterName);
+            $value = $filter->getMappings()[$value] ?? $value;
+            $filter->filter($this->builder, $value);
         }
-
-        return $this->builder;
     }
 
     /**
-     * Get applicable filters based on their presence in the query string.
-     * 
-     * @return array 
-     */
-    protected function getFilters()
-    {
-        return $this->filterFilters($this->filters);
-    }
-
-    /**
-     * Resolve a filter from the filters array by its key.
-     * 
-     * @param mixed $filter
-     * 
+     * Get a new filter instance using a given filter name.
+     *
+     * @param string $filter The filter name.
+     *
      * @return \Aldemeery\Sieve\Filter
      */
     public function resolveFilter($filter)
     {
+        if (!isset($this->filters[$filter])) {
+            throw new UnresolvableFilterException("Could not resolve filter associated with name: '{$filter}'");
+        }
+
         return new $this->filters[$filter];
     }
 
     /**
-     * Get only the filters included in the query string
-     * and return a key, value pair array.
-     * 
-     * @param array $filters 
-     * 
+     * Extract the relevant (key, value) pairs from the query string based on the
+     * filters in this filtration engine instance.
+     *
      * @return array
-     */ 
-    protected function filterFilters(array $filters)
+     */
+    protected function relevantFilters()
     {
-        return array_filter($this->request->only(array_keys($filters)));
+        return Arr::only($this->request->query(), array_keys($this->filters));
     }
 }

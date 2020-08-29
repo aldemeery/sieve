@@ -8,10 +8,10 @@ class DummyClass extends FilterBag
 {
     /**
      * Filters to be applied.
-     * 
+     *
      * @var array
      */
     protected static $filters = [
-        //
+        // "filter-name" => \FilterClass::class
     ];
 }
