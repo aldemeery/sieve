@@ -2,6 +2,7 @@
 
 namespace Aldemeery\Sieve;
 
+use Aldemeery\Sieve\Exceptions\UnresolvableFilterException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -82,6 +83,10 @@ class FiltrationEngine
      */
     public function resolveFilter($filter)
     {
+        if (!isset($this->filters[$filter])) {
+            throw new UnresolvableFilterException("Could not resolve filter associated with name: '{$filter}'");
+        }
+
         return new $this->filters[$filter];
     }
 

@@ -3,7 +3,6 @@
 namespace Aldemeery\Sieve\Concerns;
 
 use Aldemeery\Sieve\DefaultFilterBag;
-use Aldemeery\Sieve\Exceptions\FilterBagNotFoundException;
 use Aldemeery\Sieve\FiltrationEngine;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;

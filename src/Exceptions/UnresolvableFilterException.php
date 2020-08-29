@@ -4,7 +4,7 @@ namespace Aldemeery\Sieve\Exceptions;
 
 use Exception;
 
-class FilterBagNotFoundException extends Exception
+class UnresolvableFilterException extends Exception
 {
     // Silence is golden...
 }
