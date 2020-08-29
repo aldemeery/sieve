@@ -1,4 +1,19 @@
-# Clean & Easy Eloquent Filtration
+# Sieve - Clean & Easy Eloquent Filtration
+
+<p align="center">
+    <a href="https://github.com/aldemeery/sieve/actions">
+        <img src="https://github.com/aldemeery/sieve/workflows/tests/badge.svg" alt="Build Status">
+    </a>
+    <a href="https://packagist.org/packages/aldemeery/sieve">
+        <img src="https://poser.pugx.org/aldemeery/sieve/d/total.svg" alt="Total Downloads">
+    </a>
+    <a href="https://packagist.org/packages/aldemeery/sieve">
+        <img src="https://poser.pugx.org/aldemeery/sieve/v/stable.svg" alt="Latest Stable Version">
+    </a>
+    <a href="https://packagist.org/packages/aldemeery/sieve">
+        <img src="https://poser.pugx.org/aldemeery/sieve/license.svg" alt="License">
+    </a>
+</p>
 
 * [Installation](#installation)
 * [Usage](#usage)
@@ -104,21 +119,21 @@ use Illuminate\Database\Eloquent\Builder;
 class ColorFilter extends Filter
 {
     /**
-     * Filter values mappings.
+     * Values mappings.
      *
      * @var array
      */
     protected $mappings = [
-        //
+        // Silence is golden...
     ];
 
     /**
-     * Filter records.
+     * Filter records based on a given value.
      *
-     * @param Builder $builder
-     * @param mixed   $value
+     * @param \Illuminate\Database\Eloquent\Builder $builder Eloquent builder instance.
+     * @param string $value The resolved value of the filtration key sent in the query string.
      *
-     * @return Builder
+     * @return void
      */
     public function filter(Builder $builder, $value)
     {
@@ -131,12 +146,12 @@ The `$value` parameter is holding the value passed in the query string for this 
 
 ```php
 /**
- * Filter records.
+ * Filter records based on a given value.
  *
- * @param Builder $builder
- * @param mixed   $value
+ * @param \Illuminate\Database\Eloquent\Builder $builder Eloquent builder instance.
+ * @param string $value The resolved value of the filtration key sent in the query string.
  *
- * @return Builder
+ * @return void
  */
 public function filter(Builder $builder, $value)
 {
@@ -148,7 +163,7 @@ public function filter(Builder $builder, $value)
 ```
 > Note: the key 'color' in the above example is defined when you actually [use the filter](#using-individual-filters)
 
-Because you have an instance of `Illuminate\Database\Eloquent\Builder` you have all of its power, which means you can do all different sorts of things:
+Because you have an instance of `Illuminate\Database\Eloquent\Builder`, you have all of its power, which means you can do all different sorts of things:
 
 * Ordering
 ```php
@@ -168,12 +183,9 @@ public function filter(Builder $builder, $value)
 ```
 
 ### Mappings
-Sometimes you might want to use more meaningful values for your query string keys, and these values could be different from the values you actually need for filtration, this is where the `$mappings` array role comes.
+Sometimes you might want to use more meaningful values for your query string keys, however these values could be different from the values you actually need for filtration, this is where the `$mappings` comes to help.
 
-You can define your values mappings in the `$mappings` array , and then resolve the values back using the `resolveValue` method inside your filter class.
-
-The `resolveValue` method resolves the value out of the `$mappings` array or returns `null` if the value is not found.
-> Pay attention to the `null` because it can sometimes cause unexpected behavior when filtering or ordering your records.
+You can define your values mappings in the `$mappings` array , and they will be automatically resolved before being passed to the `filter` method, keep reading...
 
 Example:
 Let's assume you would like to order a list of products by their price, and you don't want to have:
@@ -192,8 +204,9 @@ use Illuminate\Database\Eloquent\Builder;
 
 class ColorFilter extends Filter
 {
+
     /**
-     * Filter values mappings.
+     * Values mappings.
      *
      * @var array
      */
@@ -203,25 +216,33 @@ class ColorFilter extends Filter
     ];
 
     /**
-     * Filter records.
+     * Filter records based on a given value.
      *
-     * @param Builder $builder
-     * @param mixed   $value
+     * @param \Illuminate\Database\Eloquent\Builder $builder Eloquent builder instance.
+     * @param string $value The resolved value of the filtration key sent in the query string.
      *
-     * @return Builder
+     * @return void
      */
     public function filter(Builder $builder, $value)
     {
-        // Assume $value is 'lowest'
-        $value = $this->resolveValue($value);
-        // $value now is 'asc'
+        // URL: https://example.com/products?price=lowest
 
-        // URL doesn't have neither 'asc' nor 'desc'
-        if ($value === null) {
-            return $builder // Don't do anything
+        // $value is automatically set to be 'asc' instead of 'lowest'
+        if ($this->validateValue($value)) {
+            $builder->orderBy('price', $value);
         }
+    }
 
-        return $builder->orderBy('price', $value);
+    /**
+     * Determine if a given value is valid.
+     *
+     * @param string $value Value to validate.
+     *
+     * @return bool
+     */
+    private validateValue($value)
+    {
+        return in_array($value, ['asc', 'desc']);
     }
 }
 ```
