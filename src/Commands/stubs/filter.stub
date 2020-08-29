@@ -8,24 +8,24 @@ use Illuminate\Database\Eloquent\Builder;
 class DummyClass extends Filter
 {
     /**
-     * Filter values mappings.
-     * 
+     * Values mappings.
+     *
      * @var array
      */
     protected $mappings = [
-        //
+        // Silence is golden...
     ];
 
     /**
-     * Filter records.
-     * 
-     * @param Builder $builder 
-     * @param mixed   $value   
-     * 
-     * @return Builder
+     * Filter records based on a given value.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $builder Eloquent builder instance.
+     * @param string $value The value of the filtration key sent with the request.
+     *
+     * @return void
      */
     public function filter(Builder $builder, $value)
     {
-        //
+        // Silence is golden...
     }
 }

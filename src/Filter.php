@@ -7,31 +7,31 @@ use Illuminate\Database\Eloquent\Builder;
 abstract class Filter
 {
     /**
-     * Filter values mappings.
-     * 
+     * Values mappings.
+     *
      * @var array
      */
-    protected $mappings = [];
+    protected $mappings = [
+        // Silence is golden...
+    ];
 
     /**
-     * Filter records.
-     * 
-     * @param Builder $builder 
-     * @param mixed   $value   
-     * 
-     * @return Builder
+     * Filter records based on a given value.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $builder Eloquent builder instance.
+     * @param string $value The value of the filtration key sent with the request.
+     *
+     * @return void
      */
     abstract public function filter(Builder $builder, $value);
 
     /**
-     * Resolve mapping value by key
-     * 
-     * @param mixed $key 
-     * 
-     * @return mixed|null
+     * Get the mappings array.
+     *
+     * @return array The mappings array
      */
-    protected function resolveValue($key)
+    public function getMappings()
     {
-        return array_get($this->mappings, $key);
+        return $this->mappings;
     }
 }
