@@ -4,6 +4,7 @@ namespace Aldemeery\Sieve;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 class FiltrationEngine
 {
@@ -85,13 +86,13 @@ class FiltrationEngine
     }
 
     /**
-     * Get the filters included in the request instance
-     * and return a ["filter-name" => "filtration-value"] pairs array.
+     * Extract the relevant (key, value) pairs from the query string based on the
+     * filters in this filtration engine instance.
      *
      * @return array
      */
     protected function relevantFilters()
     {
-        return array_filter($this->request->only(array_keys($this->filters)));
+        return Arr::only($this->request->query(), array_keys($this->filters));
     }
 }

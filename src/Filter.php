@@ -19,7 +19,7 @@ abstract class Filter
      * Filter records based on a given value.
      *
      * @param \Illuminate\Database\Eloquent\Builder $builder Eloquent builder instance.
-     * @param string $value The value of the filtration key sent with the request.
+     * @param string $value The resolved value of the filtration key sent in the query string.
      *
      * @return void
      */
