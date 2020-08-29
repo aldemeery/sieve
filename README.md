@@ -57,7 +57,7 @@ public function index(Request $request)
 
 ## Installation
 
-This package can be used in Laravel 5.3 or higher.
+This package can be used in Laravel 5.8 or higher.
 You can install the package via composer:
 
 ``` bash
