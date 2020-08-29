@@ -43,7 +43,7 @@ class FiltrationEngine
     }
 
     /**
-     * Add filters to engine.
+     * Add filters to the engine.
      *
      * @param array $filters Array of filters to add to the engine. Structure: ["filter-name" => FilterClass::class]
      *

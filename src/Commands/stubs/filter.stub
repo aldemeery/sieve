@@ -13,7 +13,7 @@ class DummyClass extends Filter
      * @var array
      */
     protected $mappings = [
-        // Silence is golden...
+        // "largest" => "desc",
     ];
 
     /**

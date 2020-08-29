@@ -28,7 +28,7 @@ abstract class Filter
     /**
      * Get the mappings array.
      *
-     * @return array The mappings array
+     * @return array
      */
     public function getMappings()
     {
