@@ -46,7 +46,7 @@ public function index(Request $request)
 ## Installation
 
 > [!IMPORTANT]
-> This package requires Laravel 9.0 or higher.
+> This package requires Laravel 11.0 or higher and PHP 8.2 or higher.
 
 You can install the package via composer:
 

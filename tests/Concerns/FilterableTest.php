@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\App;
 use PDO;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
+use Tests\Aldemeery\Sieve\BadFilter;
 use Tests\Aldemeery\Sieve\ModelWithFilters;
 use Tests\Aldemeery\Sieve\ModelWithoutFilters;
 use Tests\Aldemeery\Sieve\TestFilter;
@@ -72,5 +74,17 @@ class FilterableTest extends TestCase
 
         static::assertSame('select * from "tests" where "test" = ? and "test" = ?', $query->toSql());
         static::assertSame(['one', 'three'], $query->getBindings());
+    }
+
+    public function test_filters_not_implementing_the_filter_interface_throw_an_exception(): void
+    {
+        App::shouldReceive('make')->with(BadFilter::class)->andReturn(new BadFilter());
+
+        $filterable = new ModelWithoutFilters();
+
+        static::expectException(RuntimeException::class);
+        static::expectExceptionMessage('Filters must implement Aldemeery\Sieve\Contracts\Filter, but Tests\Aldemeery\Sieve\BadFilter does not.');
+
+        $filterable->filter(['test-1' => 'one'], ['test-1' => BadFilter::class]);
     }
 }

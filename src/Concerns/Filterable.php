@@ -9,7 +9,7 @@ use Aldemeery\Sieve\Contracts\Filter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
-use Psl\Type;
+use RuntimeException;
 
 trait Filterable
 {
@@ -24,7 +24,19 @@ trait Filterable
             fn (array $filters): array => array_merge($filters, $additional),
             fn (array $filters): array => array_intersect_key($filters, $params),
             fn (array $filters): array => array_map(
-                fn (string $filter): Filter => Type\instance_of(Filter::class)->assert(App::make($filter)),
+                function (string $filter): Filter {
+                    $filter = App::make($filter);
+
+                    if (!$filter instanceof Filter) {
+                        throw new RuntimeException(sprintf(
+                            'Filters must implement %s, but %s does not.',
+                            Filter::class,
+                            is_object($filter) ? get_class($filter) : gettype($filter),
+                        ));
+                    }
+
+                    return $filter;
+                },
                 $filters,
             ),
             fn (array $filters): true => array_walk(
