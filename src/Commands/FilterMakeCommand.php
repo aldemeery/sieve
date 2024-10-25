@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Aldemeery\Sieve\Commands;
 
 use Illuminate\Console\GeneratorCommand;
@@ -21,31 +23,24 @@ class FilterMakeCommand extends GeneratorCommand
     protected $description = 'Create a new filter class';
 
     /**
-     * The type of class being generated.
-     *
-     * @var string
-     */
-    protected $type = 'Filter';
-
-    /**
      * Get the stub file for the generator.
      *
      * @return string
      */
     protected function getStub()
     {
-        return __DIR__ . '/stubs/filter.stub';
+        return __DIR__ . '/../../stubs/filter.stub';
     }
 
     /**
      * Get the default namespace for the class.
      *
      * @param string $rootNamespace
-     * 
+     *
      * @return string
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace . '\Http\Filters';
+        return $rootNamespace . '\Filters';
     }
 }

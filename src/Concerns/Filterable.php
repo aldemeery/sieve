@@ -1,67 +1,44 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Aldemeery\Sieve\Concerns;
 
-use Aldemeery\Sieve\DefaultFilterBag;
-use Aldemeery\Sieve\FiltrationEngine;
+use Aldemeery\Onion;
+use Aldemeery\Sieve\Contracts\Filter;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\App;
+use Psl\Type;
 
 trait Filterable
 {
     /**
-     * Scope a query to use filters.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $builder Eloquent builder isntance.
-     * @param \Illuminate\Http\Request $request Incoming request instance.
-     * @param array $filters Array of filters to use. Structure: ["filter-name" => FilterClass::class]
-     *
-     * @return void
+     * @param Builder<Model>       $query
+     * @param array<string, mixed> $params
+     * @param array<string, mixed> $additional
      */
-    public function scopeFilter(Builder $builder, Request $request, array $filters = [])
+    protected function scopeFilter(Builder $query, array $params = [], array $additional = []): void
     {
-        $filters = array_merge($this->allFilters(), $filters);
-
-        (new FiltrationEngine($builder, $request))->plugFilters($filters)->run();
+        Onion\onion([
+            fn (array $filters): array => array_merge($filters, $additional),
+            fn (array $filters): array => array_intersect_key($filters, $params),
+            fn (array $filters): array => array_map(
+                fn (string $filter): Filter => Type\instance_of(Filter::class)->assert(App::make($filter)),
+                $filters,
+            ),
+            fn (array $filters): true => array_walk(
+                $filters,
+                fn (Filter $filter, string $key) => $filter->apply($query, $filter->map($params[$key])),
+            ),
+        ])->withoutExceptionHandling()->peel($this->filters());
     }
 
-    /**
-     * Filter bags used by the model.
-     *
-     * @return array
-     */
-    protected function filterBags()
-    {
-        return [
-            // \FilterBagClass::class
-        ];
-    }
-
-    /**
-     * List of individual filters to be used by the model.
-     *
-     * @return array
-     */
-    protected function filters()
+    /** @return array<string, string> */
+    private function filters(): array
     {
         return [
             // "filter-name" => \FilterCalss::class
         ];
-    }
-
-    /**
-     * Get all filters in the model combined with the filters from the filter bags.
-     *
-     * @return array
-     */
-    private function allFilters()
-    {
-        $filters = $this->filters();
-
-        foreach ($this->filterBags() as $bag) {
-            $filters = array_merge($bag::getFilters(), $filters);
-        }
-
-        return $filters;
     }
 }

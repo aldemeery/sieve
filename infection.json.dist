@@ -1,0 +1,38 @@
+{
+    "$schema": "vendor/infection/infection/resources/schema.json",
+    "source": {
+        "directories": [
+            "src"
+        ],
+        "excludes": [
+            "Commands",
+            "SieveServiceProvider.php"
+        ]
+    },
+    "timeout": 60,
+    "logs": {
+        "text": ".cache/reports/infection/infection.diff",
+        "summary": ".cache/reports/infection/infection.summary.txt",
+        "html": ".cache/reports/infection/infection.html"
+    },
+    "tmpDir": ".cache/infection",
+    "mutators": {
+        "@default": true,
+        "@arithmetic": true,
+        "@boolean": true,
+        "@cast": true,
+        "@conditional_boundary": true,
+        "@conditional_negotiation": true,
+        "@equal": false,
+        "@function_signature": true,
+        "@identical": true,
+        "@number": true,
+        "@operator": true,
+        "@regex": true,
+        "@removal": true,
+        "@return_value": true,
+        "@sort": true,
+        "@unwrap": true,
+        "@extensions": true
+    }
+}

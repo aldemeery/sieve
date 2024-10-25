@@ -1,0 +1,22 @@
+<?php
+
+namespace DummyNamespace;
+
+use Aldemeery\Sieve\Contracts\Filter;
+use Illuminate\Database\Eloquent\Builder;
+
+/** @implements Filter<\Illuminate\Database\Eloquent\Model> */
+class DummyClass implements Filter
+{
+    public function map(mixed $value): mixed
+    {
+        return match ($value) {
+            default => $value,
+        };
+    }
+
+    public function apply(Builder $query, mixed $value): void
+    {
+        // $query->where('id', $value);
+    }
+}
