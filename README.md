@@ -1,5 +1,12 @@
 # Sieve - Clean & Easy Eloquent Filtration
 
+<p>
+<a href="https://github.com/aldemeery/sieve/actions"><img src="https://github.com/aldemeery/sieve/actions/workflows/tests.yml/badge.svg" alt="Build Status"></a>
+<a href="https://packagist.org/packages/aldemeery/sieve"><img src="https://img.shields.io/packagist/dt/aldemeery/sieve?label=Downloads" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/aldemeery/sieve"><img src="https://img.shields.io/packagist/v/aldemeery/sieve?label=Latest+Version"" alt="Latest Version"></a>
+<a href="https://github.com/aldemeery/sieve/blob/master/LICENSE"><img src="https://img.shields.io/packagist/l/aldemeery/sieve?label=License"" alt="License"></a>
+</p>
+
 * [Installation](#installation)
 * [Usage](#usage)
   * [Creating Filters](#creating-filters)
