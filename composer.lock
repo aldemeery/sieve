@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0264b07070788404397bf5d250710f4e",
+    "content-hash": "db665eca33487ce9367ee8a9a4d19150",
     "packages": [
         {
             "name": "aldemeery/onion",
